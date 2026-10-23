@@ -1,5 +1,5 @@
 #include <csp/arch/csp_random.h>   /* randdom header file for API defintion*/
-#include "csp_macro.h"             /* for __weak  */
+#include "csp_macro.h"             /* for __csp_weak  */
 
 #include <zephyr/random/random.h>  /* for sys_rand_get, sys_csrand_get */
 
@@ -46,15 +46,15 @@ static uint8_t get_random(void)
 }   
 #endif
 
-__weak void csp_random_init(void) {
+__csp_weak void csp_random_init(void) {
 }
 
-__weak ssize_t csp_random(uint8_t * buf, const size_t len) {
+__csp_weak ssize_t csp_random(uint8_t * buf, const size_t len) {
     sys_rand_get((void *)buf, len);
     return len;
 }
 
-__weak ssize_t csp_random_crypto(uint8_t * buf, const size_t len) {
+__csp_weak ssize_t csp_random_crypto(uint8_t * buf, const size_t len) {
 #ifdef CONFIG_SOC_SERIES_RP2040
     size_t i = 0;
     for (; i < len; i++) {

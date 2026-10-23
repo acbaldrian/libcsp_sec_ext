@@ -5,3 +5,7 @@ elseif(CSP_FREERTOS)
 elseif(CSP_ZEPHYR)
   add_subdirectory(zephyr)
 endif()
+
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+  add_subdirectory(darwin)
+endif()

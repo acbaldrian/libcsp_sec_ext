@@ -18,14 +18,14 @@ uint8_t csp_dbg_packet_print;
 #if (CSP_PRINT_STDIO)
 #include <stdarg.h>
 #include <stdio.h>
-__weak void csp_print_func(const char * fmt, ...) {
+__csp_weak void csp_print_func(const char * fmt, ...) {
     va_list args;
     va_start(args, fmt);
     vprintf(fmt, args);
     va_end(args);
 }
 #else
-__weak void csp_print_func(const char * fmt, ...) {
+__csp_weak void csp_print_func(const char * fmt, ...) {
     (void)fmt; /* Avoid compiler warnings about unused parameter */
 }
 #endif

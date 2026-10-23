@@ -95,6 +95,7 @@ int csp_usart_open(const csp_usart_conf_t * conf, csp_usart_callback_t rx_callba
 		case 230400:
 			brate = B230400;
 			break;
+#if !defined(__APPLE__)			
 		case 460800:
 			brate = B460800;
 			break;
@@ -132,6 +133,7 @@ int csp_usart_open(const csp_usart_conf_t * conf, csp_usart_callback_t rx_callba
 		case 4000000:
 			brate = B4000000;
 			break;
+#endif
 #endif
 		default:
 			csp_print("%s: Unsupported baudrate: %u\n", __func__, conf->baudrate);

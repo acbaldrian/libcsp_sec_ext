@@ -7,7 +7,10 @@
 #define CSP_SEMAPHORE_OK 	0
 #define CSP_SEMAPHORE_ERROR	-1
 
-#if (CSP_POSIX || __DOXYGEN__)
+#if (__APPLE__)
+    #include <dispatch/dispatch.h>
+    typedef dispatch_semaphore_t csp_bin_sem_t;
+#elif (CSP_POSIX || __DOXYGEN__)
     #include <semaphore.h>
     typedef sem_t csp_bin_sem_t;
 #elif (CSP_FREERTOS)

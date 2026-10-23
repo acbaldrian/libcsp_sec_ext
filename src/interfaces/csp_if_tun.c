@@ -4,7 +4,7 @@
 #include <csp/csp_hooks.h>
 #include "csp_macro.h"
 
-__weak int csp_crypto_decrypt(uint8_t * ciphertext_in, uint8_t ciphertext_len, uint8_t * msg_out) {
+__csp_weak int csp_crypto_decrypt(uint8_t * ciphertext_in, uint8_t ciphertext_len, uint8_t * msg_out) {
 	/* Avoid compiler warnings about unused parameter */
 	(void)ciphertext_in;
 	(void)ciphertext_len;
@@ -13,7 +13,7 @@ __weak int csp_crypto_decrypt(uint8_t * ciphertext_in, uint8_t ciphertext_len, u
 	return -1;
 }
 
-__weak int csp_crypto_encrypt(uint8_t * msg_begin, uint8_t msg_len, uint8_t * ciphertext_out) {
+__csp_weak int csp_crypto_encrypt(uint8_t * msg_begin, uint8_t msg_len, uint8_t * ciphertext_out) {
 	/* Avoid compiler warnings about unused parameter */
 	(void)msg_begin;
 	(void)msg_len;

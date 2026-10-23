@@ -76,9 +76,15 @@ void csp_print_func(const char * fmt, ...);
 #define csp_print(...) do { if(0) csp_print_func(__VA_ARGS__); /* avoids unused-parameter compiler errors */ } while(0)
 #endif
 
-#define csp_rdp_error(format, ...) { if (csp_dbg_rdp_print >= 1) { csp_print("\033[31m" format "\033[0m", ##__VA_ARGS__); }}
-#define csp_rdp_protocol(format, ...) { if (csp_dbg_rdp_print >= 2) { csp_print("\033[34m" format "\033[0m", ##__VA_ARGS__); }}
-#define csp_print_packet(format, ...) { if (csp_dbg_packet_print >= 1) { csp_print("\033[32m" format "\033[0m", ##__VA_ARGS__); }}
+#define csp_rdp_error(format, ...) \
+    { if (csp_dbg_rdp_print >= 1) { csp_print("\033[31m" format "\033[0m" __VA_OPT__(, __VA_ARGS__)); }}
+#define csp_rdp_protocol(format, ...) \
+    { if (csp_dbg_rdp_print >= 2) { csp_print("\033[34m" format "\033[0m" __VA_OPT__(, __VA_ARGS__)); }}
+#define csp_print_packet(format, ...) \
+    { if (csp_dbg_packet_print >= 1) { csp_print("\033[32m" format "\033[0m" __VA_OPT__(, __VA_ARGS__)); }}
+//#define csp_rdp_error(format, ...) { if (csp_dbg_rdp_print >= 1) { csp_print("\033[31m" format "\033[0m", ##__VA_ARGS__); }}
+//#define csp_rdp_protocol(format, ...) { if (csp_dbg_rdp_print >= 2) { csp_print("\033[34m" format "\033[0m", ##__VA_ARGS__); }}
+//#define csp_print_packet(format, ...) { if (csp_dbg_packet_print >= 1) { csp_print("\033[32m" format "\033[0m", ##__VA_ARGS__); }}
 
 #ifdef __cplusplus
 }

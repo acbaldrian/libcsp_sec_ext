@@ -4,7 +4,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-__weak uint32_t csp_memfree_hook(void) {
+__csp_weak uint32_t csp_memfree_hook(void) {
 #if (configSUPPORT_DYNAMIC_ALLOCATION == 1)
 	return (uint32_t)xPortGetFreeHeapSize();
 #else
@@ -12,7 +12,7 @@ __weak uint32_t csp_memfree_hook(void) {
 #endif
 }
 
-__weak unsigned int csp_ps_hook(csp_packet_t * packet) {
+__csp_weak unsigned int csp_ps_hook(csp_packet_t * packet) {
 	(void)packet; /* Avoid compiler warnings about unused parameter */
 	return 0;
 }

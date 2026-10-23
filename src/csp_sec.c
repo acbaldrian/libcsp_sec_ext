@@ -195,12 +195,8 @@ static int csp_sec_seq_cache_init(seq_cache_t * cache, uint16_t node,
 			return CSP_ERR_NOMEM;
 		}
 		index = cache->len++;
-		if (csp_random_crypto((uint8_t *)seq_receive, sizeof(uint32_t)) < (ssize_t)sizeof(uint32_t)) {
-			return CSP_ERR_SEC;
-		}
-		if (csp_random_crypto((uint8_t *)seq_send, sizeof(uint32_t)) < (ssize_t)sizeof(uint32_t)) {
-			return CSP_ERR_SEC;
-		}
+		csp_random_crypto((uint8_t *)seq_receive, sizeof(uint32_t));
+		csp_random_crypto((uint8_t *)seq_send, sizeof(uint32_t));
 		cache->items[index].node = node;
 		cache->items[index].seq_receive = *seq_receive;
 		cache->items[index].seq_send = *seq_send;

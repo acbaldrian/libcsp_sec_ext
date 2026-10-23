@@ -111,7 +111,7 @@ static int csp_route_security_check(uint32_t security_opts, csp_iface_t * iface,
 	return CSP_ERR_NONE;
 }
 
-__weak void csp_input_hook(csp_iface_t * iface, csp_packet_t * packet) {
+__csp_weak void csp_input_hook(csp_iface_t * iface, csp_packet_t * packet) {
 	csp_print_packet("INP: S %u, D %u, Dp %u, Sp %u, Pr %u, Fl 0x%02X, Sz %" PRIu16 " VIA: %s, Tms %u\n",
 					 packet->id.src, packet->id.dst, packet->id.dport,
 					 packet->id.sport, packet->id.pri, packet->id.flags, packet->length, iface->name, csp_get_ms());

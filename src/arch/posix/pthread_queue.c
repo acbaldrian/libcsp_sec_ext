@@ -13,8 +13,15 @@ http://code.google.com/p/c-pthread-queue/
 
 #include <csp/csp.h>
 
+
+#if defined(__APPLE__)
+    #define CSP_PTHREAD_CLOCK CLOCK_REALTIME
+#else
+    #define CSP_PTHREAD_CLOCK CLOCK_MONOTONIC
+#endif
+
 static inline int get_deadline(struct timespec * ts, uint32_t timeout_ms) {
-	int ret = clock_gettime(CLOCK_MONOTONIC, ts);
+	int ret = clock_gettime(CSP_PTHREAD_CLOCK, ts);
 
 	if (ret < 0) {
 		return ret;
@@ -36,18 +43,23 @@ static inline int get_deadline(struct timespec * ts, uint32_t timeout_ms) {
 
 static inline int init_cond_clock_monotonic(pthread_cond_t * cond) {
 
-	int ret;
-	pthread_condattr_t attr;
+    int ret;
+    pthread_condattr_t attr;
 
-	pthread_condattr_init(&attr);
-	ret = pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+    pthread_condattr_init(&attr);
 
-	if (ret == 0) {
-		ret = pthread_cond_init(cond, &attr);
-	}
+#if !defined(__APPLE__)
+    ret = pthread_condattr_setclock(&attr, CSP_PTHREAD_CLOCK);
+    if (ret == 0) {
+        ret = pthread_cond_init(cond, &attr);
+    }
+#else
+    /* macOS: pthread_condattr_setclock not available, use default CLOCK_REALTIME */
+    ret = pthread_cond_init(cond, &attr);
+#endif
 
-	pthread_condattr_destroy(&attr);
-	return ret;
+    pthread_condattr_destroy(&attr);
+    return ret;
 }
 
 pthread_queue_t * pthread_queue_create(int length, size_t item_size) {
