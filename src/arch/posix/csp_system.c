@@ -6,6 +6,7 @@
 #elif defined(__CYGWIN__)
     #include <csp/csp_debug.h>
 #else
+    #include <unistd.h>
     #include <sys/sysinfo.h>
     #include <sys/reboot.h>
     #include <linux/reboot.h>

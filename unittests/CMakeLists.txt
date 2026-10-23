@@ -14,6 +14,8 @@ if(CHECK_FOUND)
     target_sources(csp_tests PRIVATE zmqhub.c)
     target_include_directories(csp_tests PRIVATE ${LIBZMQ_INCLUDE_DIRS})
     target_link_directories(csp_tests PRIVATE ${LIBZMQ_LIBRARY_DIRS})
+    target_link_libraries(csp_tests PRIVATE ${LIBZMQ_LIBRARIES})
+
   endif()
   if(CSP_USE_HMAC)
     target_sources(csp_tests PRIVATE
