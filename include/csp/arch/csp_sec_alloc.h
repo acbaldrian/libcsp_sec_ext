@@ -14,15 +14,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief memset, but the compiler "should" not optimism out the call 
- * 
- * @param [in] ptr  The pointer to the memory to fill
- * @param [in] ch   The number to use to fill memory with 
- * @param [in] size The size of the block to fill with ch
- */
-void csp_sec_memset(void * ptr, int ch, size_t size);
-
-/**
  * @brief Allocate memory and immediately lock it into RAM 
  * 
  * @param [in] size The requested size of the 

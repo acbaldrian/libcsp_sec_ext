@@ -11,8 +11,8 @@ set_target_properties(csp PROPERTIES C_STANDARD 11)
 set_target_properties(csp PROPERTIES C_EXTENSIONS ON)
 
 set_target_properties(csp PROPERTIES
-    VERSION ${CSP_VERSION}
-    SOVERSION ${CSP_VERSION_MAJOR}
+  VERSION ${CSP_VERSION}
+  SOVERSION ${CSP_VERSION_MAJOR}
 )
 
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel)
@@ -39,7 +39,7 @@ set(CSP_RTABLE_SIZE 10 CACHE STRING "Number of elements in routing table")
 option(CSP_USE_RDP "Reliable Datagram Protocol" ON)
 option(CSP_USE_HMAC "Hash-based message authentication code" ON)
 option(CSP_USE_SHA1 "Use SHA-1 hashing algorithm" OFF)
-option(CSP_USE_SEC "security extension" ON)
+option(CSP_USE_SEC "security extension" OFF)
 option(CSP_USE_PROMISC "Promiscuous mode" ON)
 option(CSP_USE_RTABLE "Use routing table" OFF)
 option(CSP_BUFFER_ZERO_CLEAR "Zero out the packet buffer upon allocation" ON)
@@ -72,19 +72,25 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   message(STATUS "adding HOMEBREW_PREFIX = ${HOMEBREW_PREFIX} to CMAKE_PREFIX_PATH")
   list(APPEND CMAKE_PREFIX_PATH ${HOMEBREW_PREFIX})
   message(STATUS "link_directories = ${HOMEBREW_PREFIX}/lib")
-  link_directories(${HOMEBREW_PREFIX}/lib)   
+  link_directories(${HOMEBREW_PREFIX}/lib)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Generic")
   string(TOLOWER "${CSP_SYSTEM_NAME}" csp_system_name)
-  if(csp_system_name STREQUAL "freertos")
+  if(csp_system_name STREQUAL "arduino")
+    message(STATUS "Arduino detected: experimental port")
+    set(CSP_ARDUINO 1)
+    set(CSP_FREERTOS 1)
+  elseif(csp_system_name STREQUAL "freertos")
     set(CSP_FREERTOS 1)
   elseif(csp_system_name STREQUAL "zephyr")
     set(CSP_ZEPHYR 1)
   else()
-    message(FATAL_ERROR "Not supported ${CSP_SYSTEM_NAME}")
+    message(FATAL_ERROR "${CMAKE_SYSTEM_NAME}: Not supported ${CSP_SYSTEM_NAME}")
   endif()
+else()
+  message(FATAL_ERROR "${CMAKE_SYSTEM_NAME}: Target system not supported")
 endif()
 
-if(CSP_POSIX AND (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin"))
+if(CSP_POSIX AND (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" OR CSP_DARWIN))
 
   include(CheckIncludeFiles)
   check_include_files(sys/socket.h HAVE_SYS_SOCKET_H)
@@ -130,6 +136,7 @@ if(CSP_POSIX AND (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_HOST_SYSTEM_N
   endif()
 endif()
 
+
 file(REAL_PATH include csp_inc)
 file(REAL_PATH src csp_inc_src)
 list(APPEND csp_inc ${CMAKE_CURRENT_BINARY_DIR}/include)
@@ -151,6 +158,18 @@ if(CSP_POSIX)
     -Wshadow
     -Wwrite-strings
     $<$<C_COMPILER_ID:Clang,AppleClang>:-Wno-gnu-zero-variadic-macro-arguments>)   
+else(CSP_ARDUINO)
+  target_compile_options(csp_common INTERFACE
+    -Wall
+    -Wcast-align
+    -Werror
+    -Wextra
+    -Wmissing-prototypes
+    # -Wpedantic
+    -Wpointer-arith
+    -Wshadow
+    -Wwrite-strings
+    $<$<C_COMPILER_ID:Clang>:-Wno-gnu-zero-variadic-macro-arguments>)
 endif()
 
 target_link_libraries(csp PRIVATE csp_common)
@@ -185,7 +204,7 @@ endif()
 
 configure_file(csp_autoconfig.h.in include/csp/autoconfig.h)
 
-if(NOT CSP_ZEPHYR)
+if(NOT (CSP_ZEPHYR OR CSP_ARDUINO))
   install(TARGETS csp LIBRARY COMPONENT runtime)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/;${CMAKE_CURRENT_SOURCE_DIR}/include/;
     TYPE INCLUDE

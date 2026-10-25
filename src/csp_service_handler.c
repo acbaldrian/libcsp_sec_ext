@@ -51,7 +51,6 @@ void csp_service_handler(csp_packet_t * packet) {
 			memcpy(&magic_word, packet->data, sizeof(magic_word));
 
 			magic_word = be32toh(magic_word);
-
 			/* If the magic word is valid, reboot */
 			if (magic_word == CSP_REBOOT_MAGIC) {
 				csp_reboot_hook();

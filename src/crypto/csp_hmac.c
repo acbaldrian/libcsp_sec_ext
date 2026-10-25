@@ -15,7 +15,7 @@
 #include <csp/csp_sec.h> /* for csp_sec_send_cache_get_seq, csp_sec_recv_cache_validate_seq */
 #include <csp/csp_id.h>  /* for csp_id_prepend */
 #endif
-#include <csp/arch/csp_sec_alloc.h> /* for csp_sec_memset */
+#include <csp/arch/csp_memset.h> /* for csp_memset */
 
 #include <string.h> /* for memcmp, memcpy, memset */
 #include <assert.h> /* for assert */
@@ -116,8 +116,8 @@ void csp_hmac_init(csp_hmac_state_t * state, const uint8_t * key, size_t keylen)
 	csp_sha256_update(&state->inner_ctx, ipad, CSP_SHA256_BLOCK_SIZE);
 
 	/* Clean up transient key material from stack */
-	csp_sec_memset((void *)k0, 0, CSP_SHA256_BLOCK_SIZE);
-	csp_sec_memset((void *)ipad, 0, CSP_SHA256_BLOCK_SIZE);
+	csp_memset((void *)k0, 0, CSP_SHA256_BLOCK_SIZE);
+	csp_memset((void *)ipad, 0, CSP_SHA256_BLOCK_SIZE);
 #endif
 }
 
@@ -186,9 +186,9 @@ void csp_hmac_done(csp_hmac_state_t * state, uint8_t hmac[CSP_HMAC_DIGEST_LEN]) 
 	csp_sha256_final(&sha256_ctx, hmac);
 
 	/* Clean up residual key material from context states */
-	csp_sec_memset(&sha256_ctx, 0, sizeof(sha256_ctx));
-	csp_sec_memset(inner_hash, 0, sizeof(inner_hash));
-	csp_sec_memset(state, 0, sizeof(csp_hmac_state_t));
+	csp_memset(&sha256_ctx, 0, sizeof(sha256_ctx));
+	csp_memset(inner_hash, 0, sizeof(inner_hash));
+	csp_memset(state, 0, sizeof(csp_hmac_state_t));
 #endif
 }
 
@@ -285,7 +285,10 @@ void csp_hkdf(const uint8_t * ikm, size_t ikm_len,
 void csp_hmac_memory(const void * key, uint32_t keylen, const void * data, size_t datalen, uint8_t hmac[CSP_HMAC_DIGEST_LEN]) {
 
 	assert(key != NULL && keylen > 0);
-	assert(data != NULL && datalen > 0);
+	assert(data != NULL);
+#if (CSP_USE_SEC)
+	assert(datalen > 0);
+#endif
 	assert(hmac != NULL);
 
 	csp_hmac_state_t state;
@@ -325,7 +328,7 @@ int csp_hmac_append(csp_packet_t * packet, bool include_header) {
 	}
 	uint8_t hmac[CSP_HMAC_DIGEST_LEN];
 
-#if (CSP_USE_HMAC)
+#if (CSP_USE_SEC)
 	(void)include_header; /* unused paramiter */
 
 	csp_id_prepend(packet);
@@ -363,7 +366,7 @@ int csp_hmac_verify(csp_packet_t * packet, bool include_header) {
 	}
 	uint8_t hmac[CSP_HMAC_DIGEST_LEN];
 
-#if (CSP_USE_HMAC)
+#if (CSP_USE_SEC)
 	(void)include_header; /* unused paramiter */
 
 	csp_hmac_memory(csp_hmac_key, sizeof(csp_hmac_key), packet->frame_begin, packet->frame_length - CSP_HMAC_LENGTH, hmac);

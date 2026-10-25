@@ -11,9 +11,16 @@ target_sources(csp PRIVATE
 find_package(Threads REQUIRED)
 target_link_libraries(csp PRIVATE Threads::Threads)
 
-if (CSP_USE_SEC)
+if (CSP_USE_HMAC)
   target_sources(csp PRIVATE
-    csp_random.c
-    csp_sec_alloc.c
+    csp_memset.c
   )
 endif()
+
+if (CSP_USE_SEC)
+  target_sources(csp PRIVATE
+    csp_sec_alloc.c
+    csp_random.c
+  )
+endif()
+

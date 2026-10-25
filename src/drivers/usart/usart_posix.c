@@ -59,7 +59,8 @@ int csp_usart_write(csp_usart_fd_t fd, const void * data, size_t data_length) {
 
 	if (fd >= 0) {
 		int res = write(fd, data, data_length);
-		if (res >= 0) {
+		if (
+			res >= 0) {
 			return res;
 		}
 	}
@@ -95,7 +96,7 @@ int csp_usart_open(const csp_usart_conf_t * conf, csp_usart_callback_t rx_callba
 		case 230400:
 			brate = B230400;
 			break;
-#if !defined(__APPLE__)			
+#if !defined(__APPLE__)
 		case 460800:
 			brate = B460800;
 			break;

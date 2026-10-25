@@ -14,9 +14,15 @@ if (CONFIG_ARMV6_M_ARMV8_M_BASELINE)
   )
 endif()
 
+if (CSP_USE_HMAC)
+  target_sources(csp PRIVATE
+    csp_memset.c
+  )
+endif()
+
 if (CSP_USE_SEC)
   target_sources(csp PRIVATE
-    csp_random.c
     csp_sec_alloc.c
+    csp_random.c
   )
 endif()

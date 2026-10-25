@@ -6,7 +6,7 @@
  * Hash-based Message Authentication Code - based on code from libtom.org.
  *
  * The SHA256 based HMAC, is based on the  RFC 6151, https://www.rfc-editor.org/info/rfc6151/
- * 
+ *
  ****************************************************************************/
 #pragma once
 
@@ -97,8 +97,12 @@ void csp_hkdf(const uint8_t * ikm, size_t ikm_len,
  ****************************************************************************/
 
 /**
- * Calculate HMAC on buffer
- * This function is used by append/verify but cal also be called separately.
+ * @brief  HMAC on buffer
+ * @note This function is used by append/verify but can also be called separately.
+ *
+ * @note For backward compatibility datalen can be zero, this will happen when the header is included,
+ *       and we are sending a request such as uptime, that has no data in the packet.
+ *       when CSP_USE_SEC is ON, datalen must be greaterthan zero, and the packet header is always included
  *
  * @param[in] key HMAC key
  * @param[in] keylen HMAC key length
