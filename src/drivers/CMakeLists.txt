@@ -25,3 +25,12 @@ endif()
 if(HAVE_ZEPHYR_CAN) 
   target_sources(csp PRIVATE can/can_zephyr.c)
 endif()
+
+if(CSP_USE_KISS2)
+  target_sources(csp PRIVATE
+    kiss2/kiss2.c
+  )
+  if(CSP_POSIX)
+    target_sources(csp PRIVATE kiss2/kiss2_usart_${CSP_DRIVER_USART}.c)
+  endif()
+endif()

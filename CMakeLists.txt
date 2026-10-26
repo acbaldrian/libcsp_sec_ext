@@ -37,6 +37,7 @@ set(CSP_RDP_MAX_WINDOW 5 CACHE STRING "Max window size for RDP")
 set(CSP_RTABLE_SIZE 10 CACHE STRING "Number of elements in routing table")
 
 option(CSP_USE_RDP "Reliable Datagram Protocol" ON)
+option(CSP_USE_KISS2 "Use the new version of the KISS interface and driver" ON)
 option(CSP_USE_HMAC "Hash-based message authentication code" ON)
 option(CSP_USE_SHA1 "Use SHA-1 hashing algorithm" OFF)
 option(CSP_USE_SEC "security extension" OFF)
@@ -56,6 +57,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 else()
   set(CSP_DEFAULT_DRIVER_USART "posix")
 endif()
+
 set(CSP_DRIVER_USART "${CSP_DEFAULT_DRIVER_USART}" CACHE STRING "USART driver implementation. [linux, posix]")
 set_property(CACHE CSP_DRIVER_USART PROPERTY STRINGS linux posix)
 

@@ -9,6 +9,12 @@ target_sources(csp PRIVATE
   csp_if_eth_pbuf.c
   )
 
+if(CSP_USE_KISS2)
+  target_sources(csp PRIVATE
+    csp_if_kiss2.c
+  )
+endif()
+
 if(LIBZMQ_FOUND)
   add_library(if_zmq OBJECT csp_if_zmqhub.c)
   target_include_directories(if_zmq PRIVATE
