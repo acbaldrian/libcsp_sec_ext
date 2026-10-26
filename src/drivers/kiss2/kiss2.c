@@ -24,7 +24,7 @@ static void csp_kiss2_rx_callback(void * callback_ctx, uint8_t * buf, size_t len
 }
 
 int csp_driver_open_add_kiss2_interface(csp_kiss2_driver_context_t * kiss_ctx,
-										csp_kiss2_driver_t * driver,
+										const csp_kiss2_driver_t * driver,
 										void * driver_data,
 										void * driver_param,
 										const char * ifname, uint16_t addr,

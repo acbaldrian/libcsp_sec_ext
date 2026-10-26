@@ -41,7 +41,11 @@ typedef struct {
  * @param[out] return_iface the added interface. (can be NULL)
  * @return #CSP_ERR_NONE on success, otherwise an error code.
  */
-int csp_driver_open_add_kiss2_interface(csp_kiss2_driver_context_t * kiss_ctx, csp_kiss2_driver_t * driver, void * driver_ctx, void * driver_param, const char * ifname, uint16_t addr, csp_iface_t ** return_iface);
+int csp_driver_open_add_kiss2_interface(csp_kiss2_driver_context_t * kiss_ctx,
+										const csp_kiss2_driver_t * driver,
+										void * driver_ctx, void * driver_param,
+										const char * ifname, uint16_t addr,
+										csp_iface_t ** return_iface);
 
 #ifdef __cplusplus
 }

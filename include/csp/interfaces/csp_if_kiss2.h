@@ -5,14 +5,14 @@
  *                  this implementation is derived from the csp_if_kiss
  *                  implementation. but uses a different drive interface.
  *                  to allow for more that one implementation of the KISS
- *                  interface. 
- * 
+ *                  interface.
+ *
  ****************************************************************************/
 #pragma once
 
-#include <csp/csp_interface.h>			/* for csp_iface_t */
-#include <csp/drivers/kiss2_driver.h>	/* for csp_kiss2_driver_t */
-#include <csp/interfaces/csp_if_kiss.h>	/* for csp_kiss_mode_t */
+#include <csp/csp_interface.h>          /* for csp_iface_t */
+#include <csp/drivers/kiss2_driver.h>   /* for csp_kiss2_driver_t */
+#include <csp/interfaces/csp_if_kiss.h> /* for csp_kiss_mode_t */
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,12 +27,12 @@ extern "C" {
  * @brief KISS2 interface data (state information).
  */
 typedef struct {
-	csp_kiss2_driver_t * driver;   /**< the driver this interface is using */
-	csp_kiss_mode_t rx_mode;     /**< Rx mode/state. */
-	unsigned int rx_length;      /**< Rx length */
-	bool rx_first;               /**< Rx first - if set, waiting for first character
-						              (== TNC_DATA) after start */
-	csp_packet_t * rx_packet;    /**< CSP packet for storing Rx data. */
+	const csp_kiss2_driver_t * driver; /**< the driver this interface is using */
+	csp_kiss_mode_t rx_mode;           /**< Rx mode/state. */
+	unsigned int rx_length;            /**< Rx length */
+	bool rx_first;                     /**< Rx first - if set, waiting for first character
+											(== TNC_DATA) after start */
+	csp_packet_t * rx_packet;          /**< CSP packet for storing Rx data. */
 } csp_kiss2_interface_data_t;
 
 /**

@@ -7,13 +7,13 @@
  */
 
 #include <csp/interfaces/csp_if_kiss2.h>
-#include <csp/interfaces/csp_if_kiss.h>  /* for csp_kiss_mode_t */
-#include <csp/drivers/kiss2.h>           /* for csp_kiss2_driver_t */
+#include <csp/interfaces/csp_if_kiss.h> /* for csp_kiss_mode_t */
+#include <csp/drivers/kiss2.h>          /* for csp_kiss2_driver_t */
 
 #if CSP_ENABLE_KISS_CRC
-#include <csp/csp_crc32.h>				 /* for csp_crc32_append, csp_crc32_verify */
+#include <csp/csp_crc32.h> /* for csp_crc32_append, csp_crc32_verify */
 #endif
-#include <csp/csp_id.h>					 /* for csp_id_prepend, csp_id_setup_rx, csp_id_strip */
+#include <csp/csp_id.h> /* for csp_id_prepend, csp_id_setup_rx, csp_id_strip */
 
 #include "../csp_buffer_private.h"
 
@@ -25,12 +25,12 @@
 
 /**
  * @brief Send CSP packet over KISS (nexthop)
- * 
+ *
  * @note the packet is encoded as a KISS bytes and sent using the KISS2 driver
- * 
+ *
  * @param iface     Outgoing interface
  * @param via       Next hop address (if applicable) (not used)
- * @param packet    the packet to send 
+ * @param packet    the packet to send
  * @param from_me   Whether the packet originates from this node  (not used)
  */
 static int csp_kiss2_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {
@@ -39,7 +39,7 @@ static int csp_kiss2_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet
 	(void)from_me;
 
 	csp_kiss2_interface_data_t * ifdata = iface->interface_data;
-	csp_kiss2_driver_t * driver = ifdata->driver;
+	const csp_kiss2_driver_t * driver = ifdata->driver;
 	void * driver_data = iface->driver_data;
 
 	/* signal to the driver that we are starting a transmission
@@ -92,7 +92,6 @@ static int csp_kiss2_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet
 	/* signal to the driver that we have finished a transmission
 	 * the driver may lock the driver or other set up needed to transmit  */
 	driver->finish(driver_data);
-
 
 	/* Free data */
 	csp_buffer_free(packet);
